@@ -295,21 +295,6 @@ Also ensure `pyproject.toml` includes:
 packages = ["src/qrgenerator"]
 ```
 
-## Development Notes
-
-The app should keep GUI code separate from QR generation logic.
-
-Recommended file responsibilities:
-
-```text
-main.py          Starts the QApplication
-main_window.py   Contains the PySide6 window and widgets
-qr_service.py    Handles QR code generation
-config.py        Loads .env configuration
-tests/           Contains automated tests
-```
-
-Avoid placing all code in one file once the app grows. This makes the app easier to test, package, and maintain.
 
 ## License
 
