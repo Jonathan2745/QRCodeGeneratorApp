@@ -23,7 +23,7 @@ def make_background_transparent(image: Image.Image) -> Image.Image:
     pixels = rgba_image.getdata()
     new_pixels = []
 
-    for r, g, b, a in pixels:
+    for r, g, b, _a in pixels:
         if (r, g, b) == (255, 255, 255):
             new_pixels.append((255, 255, 255, 0))
         else:

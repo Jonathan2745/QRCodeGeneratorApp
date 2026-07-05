@@ -74,6 +74,10 @@ class VCardData:
     organisation: str = ""
     email: str = ""
     url: str = ""
+    emails: list[str] = field(default_factory=list)
+    urls: list[str] = field(default_factory=list)
+    url_type: str = "work"
+    url_types: list[str] = field(default_factory=list)
 
     primary_phone: PhoneNumber = field(default_factory=PhoneNumber)
     extra_phones: list[PhoneNumber] = field(default_factory=list)
@@ -103,8 +107,12 @@ def build_vcard(data: VCardData) -> str:
     if data.organisation.strip():
         lines.append(f"ORG:{escape_vcard_text(data.organisation)}")
 
-    if data.email.strip():
-        lines.append(f"EMAIL;TYPE=work;PREF:{escape_vcard_text(data.email)}")
+    email_values = [data.email, *data.emails]
+    email_values = [email for email in email_values if email.strip()]
+
+    for index, email in enumerate(email_values):
+        email_type = "work;PREF" if index == 0 else "work"
+        lines.append(f"EMAIL;TYPE={email_type}:{escape_vcard_text(email)}")
 
     if not data.primary_phone.is_empty():
         phone_type = data.primary_phone.label or "work"
@@ -137,9 +145,7 @@ def build_vcard(data: VCardData) -> str:
         address_type = address.label or "work"
 
         street = " ".join(
-            part.strip()
-            for part in [address.first_line, address.second_line]
-            if part.strip()
+            part.strip() for part in [address.first_line, address.second_line] if part.strip()
         )
 
         lines.append(
@@ -152,8 +158,22 @@ def build_vcard(data: VCardData) -> str:
             f"{escape_vcard_text(address.country)}"
         )
 
+    url_values = []
+
     if data.url.strip():
-        lines.append(f"URL;TYPE=work;PREF:{escape_vcard_text(data.url)}")
+        url_values.append((data.url, data.url_type))
+
+    for index, url in enumerate(data.urls):
+        if not url.strip():
+            continue
+
+        url_type = data.url_types[index] if index < len(data.url_types) else data.url_type
+        url_values.append((url, url_type))
+
+    for index, (url, url_type) in enumerate(url_values):
+        escaped_url_type = escape_vcard_text(url_type or "work")
+        type_parameters = f"{escaped_url_type};PREF" if index == 0 else escaped_url_type
+        lines.append(f"URL;TYPE={type_parameters}:{escape_vcard_text(url)}")
 
     revision_time = datetime.now(timezone.utc).isoformat(timespec="milliseconds")
     lines.append(f"REV:{revision_time}")
