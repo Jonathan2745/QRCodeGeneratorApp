@@ -1,8 +1,8 @@
-# QR Code Generator App
+# vCard QR Code Generator App
 
 A desktop QR code generator built with **Python 3.14**, **PySide6**, `qrcode`, and Pillow.
 
-This app provides a simple GUI for generating QR codes from user-provided text, URLs, contact details, payment strings, or other QR-compatible content.
+This app provides a simple GUI for generating QR codes in vCard format from user-provided text, URLs, contact details, payment strings, or other QR-compatible content.
 
 ## Features
 
