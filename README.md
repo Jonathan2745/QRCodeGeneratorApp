@@ -57,7 +57,7 @@ This project is currently developed using a local Python virtual environment.
 ### 1. Clone or open the project folder
 
 ```powershell
-cd "C:\Users\Eisen\Documents\QRCodeGeneratorApp"
+cd "C:\path\to\QRCodeGeneratorApp"
 ```
 
 For macOS or Linux:
